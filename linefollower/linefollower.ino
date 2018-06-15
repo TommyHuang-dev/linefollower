@@ -29,24 +29,27 @@ void loop() {
   float voltageM = (float)sensorM * 5.0 / 1023.0;
   float voltageR = (float)sensorR * 5.0 / 1023.0;
 
-  // keep going straight if both side sensors are low
-  if (voltageL < 3 && voltageR < 3) {
+  // keep going straight if the middle sensor is high
+  if (voltageM >= 3) {
     // go forward
     digitalWrite(LMotorPort, HIGH);
     digitalWrite(RMotorPort, HIGH);
   }
   // power right wheel to go left if only left sensor is high
   else if (voltageL >= 3 && voltageR < 3) {
+    // turn left
     digitalWrite(LMotorPort, LOW);
     digitalWrite(RMotorPort, HIGH);
   }
   // power left wheel to go right if only right sensor is high
   else if (voltageL < 3 && voltageR >= 3) {
+    // turn right
     digitalWrite(LMotorPort, HIGH);
     digitalWrite(RMotorPort, LOW);
   }
   // if all three sensors are high, stop.
   else if (voltageL >= 3 && voltageM >= 3 && voltageR >= 3) {
+    // stahp
     digitalWrite(LMotorPort, LOW);
     digitalWrite(RMotorPort, LOW);
   }
