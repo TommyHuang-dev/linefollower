@@ -33,7 +33,7 @@ void loop() {
   // keep going straight if the middle sensor is high
   if (voltageM >= boundary && voltageL < boundary && voltageR < boundary) {
     // go forward
-    analogWrite(LMotorPort, 128);
+    analogWrite(LMotorPort, 140);
     analogWrite(RMotorPort, 128);
   }
   // power right wheel to go left if only left sensor is high
