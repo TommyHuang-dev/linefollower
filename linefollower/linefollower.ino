@@ -1,8 +1,9 @@
 #define LMotorPort 5
 #define RMotorPort 6
-#define LSensorPort A0
-#define MSensorPort A1
-#define RSensorPort A2
+#define LSensorPort A5
+#define MSensorPort A4
+#define RSensorPort A3
+#define boundary 3
 
 
 void setup() {
@@ -12,9 +13,9 @@ void setup() {
   pinMode(LMotorPort, OUTPUT);
   pinMode(RMotorPort, OUTPUT);
   // setup IR sensors
-  pinMode(LSensorPort, OUTPUT);
-  pinMode(MSensorPort, OUTPUT);
-  pinMode(RSensorPort, OUTPUT);
+  pinMode(LSensorPort, INPUT);
+  pinMode(MSensorPort, INPUT);
+  pinMode(RSensorPort, INPUT);
   
 }
 
@@ -28,35 +29,35 @@ void loop() {
   float voltageL = (float)sensorL * 5.0 / 1023.0;
   float voltageM = (float)sensorM * 5.0 / 1023.0;
   float voltageR = (float)sensorR * 5.0 / 1023.0;
-
+  
   // keep going straight if the middle sensor is high
-  if (voltageM >= 3) {
+  if (voltageM >= boundary && voltageL < boundary && voltageR < boundary) {
     // go forward
     digitalWrite(LMotorPort, HIGH);
     digitalWrite(RMotorPort, HIGH);
   }
   // power right wheel to go left if only left sensor is high
-  else if (voltageL >= 3 && voltageR < 3) {
+  else if (voltageL >= boundary && voltageR < boundary) {
     // turn left
     digitalWrite(LMotorPort, LOW);
     digitalWrite(RMotorPort, HIGH);
   }
   // power left wheel to go right if only right sensor is high
-  else if (voltageL < 3 && voltageR >= 3) {
+  else if (voltageL < boundary && voltageR >= boundary) {
     // turn right
     digitalWrite(LMotorPort, HIGH);
     digitalWrite(RMotorPort, LOW);
   }
   // if all three sensors are high, stop.
-  else if (voltageL >= 3 && voltageM >= 3 && voltageR >= 3) {
+  else if (voltageL >= boundary && voltageM >= boundary && voltageR >= boundary) {
     // stahp
     digitalWrite(LMotorPort, LOW);
     digitalWrite(RMotorPort, LOW);
   }
   
+  Serial.println(voltageM);
   
   // only for the serial monitor, delete or comment out if not needed
-  delay(50);
 }
 
 
