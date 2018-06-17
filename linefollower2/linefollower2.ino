@@ -31,29 +31,17 @@ void loop() {
   float voltageR = (float)sensorR * 5.0 / 1023.0;
   
   // keep going straight if the middle sensor is high
-  if (voltageM >= boundary && voltageL < boundary && voltageR < boundary) {
-    // go forward
-    analogWrite(LMotorPort, 128);
-    analogWrite(RMotorPort, 128);
-  }
-  // power right wheel to go left if only left sensor is high
-  else if (voltageL >= boundary && voltageR < boundary) {
-    // turn left
+  // power left wheel to go right if only left sensor is high
+  if (voltageL >= boundary) {
     analogWrite(LMotorPort, 0);
     analogWrite(RMotorPort, 128);
   }
-  // power left wheel to go right if only right sensor is high
-  else if (voltageL < boundary && voltageR >= boundary) {
-    // turn right
+
+  else if (voltageM >= boundary) {
     analogWrite(LMotorPort, 128);
     analogWrite(RMotorPort, 0);
   }
-  // if all three sensors are high, stop.
-  else if (voltageL >= boundary && voltageM >= boundary && voltageR >= boundary) {
-    // stahp
-    digitalWrite(LMotorPort, LOW);
-    digitalWrite(RMotorPort, LOW);
-  }
+  
   /*
   Serial.print("L: ");
   Serial.println(voltageL);
