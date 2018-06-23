@@ -1,15 +1,20 @@
+// ports being used
 #define LMotorPort 5
 #define RMotorPort 6
 #define LSensorPort A5
 #define MSensorPort A4
 #define RSensorPort A3
+// sensitivity of sensors
 #define boundary 3.2
+// speed of motors
 #define motorSpeed 150
 
+// variables for voltages of sensors
+int sensorL, sensorM, sensorR;
+double voltageL, voltageM, voltageR;
 
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
+//  Serial.begin(9600);
   // setup motors
   pinMode(LMotorPort, OUTPUT);
   pinMode(RMotorPort, OUTPUT);
@@ -22,14 +27,13 @@ void setup() {
 
 
 void loop() {
-  // put your main code here, to run repeatedly:
   // get the voltage of all sensors
-  int sensorL = analogRead(LSensorPort);
-  int sensorM = analogRead(MSensorPort);
-  int sensorR = analogRead(RSensorPort);
-  double voltageL = (double)sensorL * 5.0 / 1023.0;
-  double voltageM = (double)sensorM * 5.0 / 1023.0;
-  double voltageR = (double)sensorR * 5.0 / 1023.0;
+  sensorL = analogRead(LSensorPort);
+  sensorM = analogRead(MSensorPort);
+  sensorR = analogRead(RSensorPort);
+  voltageL = (double)sensorL * 5.0 / 1023.0;
+  voltageM = (double)sensorM * 5.0 / 1023.0;
+  voltageR = (double)sensorR * 5.0 / 1023.0;
   
   // keep going straight if the middle sensor is high
   if (voltageM >= boundary - 0.5 && voltageL < boundary && voltageR < boundary) {
@@ -40,14 +44,14 @@ void loop() {
   // power right wheel to go left if only left sensor is high
   else if (voltageL >= boundary && voltageR < boundary) {
     // turn left
-    analogWrite(LMotorPort, 0);
+    digitalWrite(LMotorPort, LOW);
     analogWrite(RMotorPort, motorSpeed);
   }
   // power left wheel to go right if only right sensor is high
   else if (voltageL < boundary && voltageR >= boundary) {
     // turn right
     analogWrite(LMotorPort, motorSpeed);
-    analogWrite(RMotorPort, 0);
+    digitalWrite(RMotorPort, LOW);
   }
   // if all three sensors are high, stop.
   else if (voltageL >= boundary && voltageM >= boundary && voltageR >= boundary) {
@@ -60,11 +64,10 @@ void loop() {
 //  Serial.println(voltageL);
   
 //  Serial.print("M: ");
-  Serial.println(voltageM);
+//  Serial.println(voltageM);
 
 //  Serial.print("R: ");
 //  Serial.println(voltageR);
-  // only for the serial monitor, delete or comment out if not needed
 }
 
 
