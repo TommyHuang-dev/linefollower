@@ -5,7 +5,7 @@
 #define MSensorPort A4
 #define RSensorPort A3
 // sensitivity of sensors
-#define boundary 3.2
+#define boundary 3.6
 // speed of motors
 #define motorSpeed 150
 
